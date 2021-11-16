@@ -26,10 +26,11 @@ def convert_hdf5_train(files, image_path, output_path, key):
     hf_file = h5py.File(output_path, 'w')
     for img_file in files:
         s_name = img_file.split(' ')
-        # take only COVID negative images 
+        # take only COVID negative images
+        image_file_name = s_name[-3]
         if s_name[-2] == "negative":
             try:
-                img = Image.open(image_path + img_file).convert('L')
+                img = Image.open(image_path + image_file_name).convert('L')
                 img = np.asarray(img.resize((256, 256)))
                 l_images.append(img)
                 ctr += 1
@@ -64,10 +65,10 @@ def convert_hdf5_test(files, image_path, output_path, key):
 
 
 print("Saving training images...")
-convert_hdf5_train(read_text_file("train_split.txt"), train_path, train_path + tr_h5, "tr_images")
+convert_hdf5_train(read_text_file("train_split.txt"), train_path, tr_h5, "tr_images")
 
 print("Saving test images...")
-convert_hdf5_test(read_text_file("test_split.txt"), test_path, test_path + te_h5, "te_images")
+convert_hdf5_test(read_text_file("test_split.txt"), test_path, te_h5, "te_images")
 
 print("Saving test pred images...")
-convert_hdf5_test(read_text_file("test_split.txt"), test_pred_path, test_pred_path + te_pred_h5, "te_pred_images")
+convert_hdf5_test(read_text_file("test_split.txt"), test_pred_path, te_pred_h5, "te_pred_images")
